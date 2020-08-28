@@ -1,0 +1,156 @@
+{
+	"name": "pipeline1",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Excel File Name",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Excel Sheet Name",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "FileName",
+						"value": "Business Intelligence Summit - Demo Data"
+					},
+					{
+						"name": "SheetName",
+						"value": "Sales Orders"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "ExcelSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						}
+					},
+					"sink": {
+						"type": "SqlServerSink",
+						"tableOption": "autoCreate"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "src_excel",
+						"type": "DatasetReference",
+						"parameters": {
+							"FileName": {
+								"value": "@{activity('Excel File Name').output.firstRow}",
+								"type": "Expression"
+							},
+							"SheetName": {
+								"value": "@{activity('Excel Sheet Name').output.firstRow}",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "PWAzureTrainingDB",
+						"type": "DatasetReference",
+						"parameters": {
+							"TableName": "dummy",
+							"SchemaName": "dummy"
+						}
+					}
+				]
+			},
+			{
+				"name": "Excel File Name",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ExcelSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						}
+					},
+					"dataset": {
+						"referenceName": "src_excel",
+						"type": "DatasetReference",
+						"parameters": {
+							"FileName": "Business Intelligence Summit - Demo Data.xlsx",
+							"SheetName": "Sales Orders"
+						}
+					}
+				}
+			},
+			{
+				"name": "Excel Sheet Name",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ExcelSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						}
+					},
+					"dataset": {
+						"referenceName": "src_excel",
+						"type": "DatasetReference",
+						"parameters": {
+							"FileName": "Business Intelligence Summit - Demo Data.xlsx",
+							"SheetName": "Sales Orders"
+						}
+					}
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2020-08-18T19:18:42Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
