@@ -28,11 +28,89 @@
 						"type": "TabularTranslator",
 						"mappings": [
 							{
+								"source": {
+									"name": "AcctCdOrig",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
 								"sink": {
-									"name": ""
+									"name": "IngestFieldId",
+									"type": "Int32",
+									"physicalType": "int"
 								}
 							},
-							null
+							{
+								"source": {
+									"name": "AcctCd",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "DateCapture",
+									"type": "DateTime",
+									"physicalType": "datetime"
+								}
+							},
+							{
+								"source": {
+									"name": "AcctCdLong",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "DataSource",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "AcctCdNoZero",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "SubjectArea",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "AcctTypCd",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "Field1",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "AcctDescOrig",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "Field1Function",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							},
+							{
+								"source": {
+									"name": "AcctDesc",
+									"type": "String",
+									"physicalType": "nvarchar"
+								},
+								"sink": {
+									"name": "Field1Type",
+									"type": "String",
+									"physicalType": "nvarchar"
+								}
+							}
 						],
 						"typeConversion": true,
 						"typeConversionSettings": {
@@ -57,8 +135,8 @@
 						"referenceName": "SQLServer_Local_Stage",
 						"type": "DatasetReference",
 						"parameters": {
-							"TableName": "dbo",
-							"SchemaName": "IngestField"
+							"TableName": "IngestField",
+							"SchemaName": "dbo"
 						}
 					}
 				]
