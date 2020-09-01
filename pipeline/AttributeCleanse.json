@@ -1,0 +1,81 @@
+{
+	"name": "AttributeCleanse",
+	"properties": {
+		"activities": [
+			{
+				"name": "Stored procedure1",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[Cleanse_InsertAttribute]",
+					"storedProcedureParameters": {
+						"ColumnName": {
+							"value": "",
+							"type": "String"
+						},
+						"DataSource": {
+							"value": "",
+							"type": "String"
+						},
+						"SchemaName": {
+							"value": "",
+							"type": "String"
+						},
+						"SubjectArea": {
+							"value": "",
+							"type": "String"
+						},
+						"TableName": {
+							"value": "",
+							"type": "String"
+						},
+						"ValueFunction": {
+							"value": "",
+							"type": "String"
+						},
+						"ValueType": {
+							"value": "",
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "SQLServer_Local_CDM_Stage",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"SchemaName": {
+				"type": "string"
+			},
+			"TableName": {
+				"type": "string"
+			},
+			"ColumnName": {
+				"type": "string"
+			},
+			"DataSource": {
+				"type": "string"
+			},
+			"SubjectArea": {
+				"type": "string"
+			},
+			"ValueFunction": {
+				"type": "string"
+			},
+			"ValueType": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}
