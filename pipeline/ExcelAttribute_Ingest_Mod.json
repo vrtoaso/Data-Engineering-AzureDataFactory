@@ -290,10 +290,10 @@
 			"SubjectArea": {
 				"type": "string"
 			},
-			"DestSchemaName": {
+			"SchemaName": {
 				"type": "string"
 			},
-			"DestTableName": {
+			"TableName": {
 				"type": "string"
 			}
 		},

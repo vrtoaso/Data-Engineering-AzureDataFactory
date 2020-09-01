@@ -11,6 +11,9 @@
 			},
 			"SrcSchemaName": {
 				"type": "string"
+			},
+			"SrcColumnName": {
+				"type": "string"
 			}
 		},
 		"annotations": [],
@@ -18,11 +21,11 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": {
-				"value": "@dataset().SchemaName",
+				"value": "@dataset().SrcSchemaName",
 				"type": "Expression"
 			},
 			"table": {
-				"value": "@dataset().TableName",
+				"value": "@{dataset().SrcTableName}.{dataset().SrcColumnName}",
 				"type": "Expression"
 			}
 		}
