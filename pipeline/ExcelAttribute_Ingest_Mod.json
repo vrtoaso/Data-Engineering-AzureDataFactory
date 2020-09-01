@@ -21,12 +21,7 @@
 						"partitionOption": "None"
 					},
 					"sink": {
-						"type": "SqlServerSink",
-						"preCopyScript": {
-							"value": "DROP TABLE @{pipeline().parameters.SchemaName}.@{pipeline().parameters.TableName}",
-							"type": "Expression"
-						},
-						"tableOption": "autoCreate"
+						"type": "SqlServerSink"
 					},
 					"enableStaging": false,
 					"translator": {
@@ -280,21 +275,11 @@
 			}
 		],
 		"parameters": {
-			"FileName": {
-				"type": "string",
-				"defaultValue": "Business Intelligence Summit - Demo Data.xlsx"
+			"SrcSchemaName": {
+				"type": "string"
 			},
-			"SheetName": {
-				"type": "string",
-				"defaultValue": "Sales Orders"
-			},
-			"SchemaName": {
-				"type": "string",
-				"defaultValue": "dbo"
-			},
-			"TableName": {
-				"type": "string",
-				"defaultValue": "BISummit_SalesOrders"
+			"SrcTableName": {
+				"type": "string"
 			},
 			"Column": {
 				"type": "string"
@@ -303,6 +288,12 @@
 				"type": "string"
 			},
 			"SubjectArea": {
+				"type": "string"
+			},
+			"DestSchemaName": {
+				"type": "string"
+			},
+			"DestTableName": {
 				"type": "string"
 			}
 		},
