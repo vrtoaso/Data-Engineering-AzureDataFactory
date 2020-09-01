@@ -1,8 +1,8 @@
 {
-	"name": "SQLServer_Local_Stage",
+	"name": "SQLServer_Local_CDM_Stage",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "SQLServer_Local_Stage",
+			"referenceName": "SQLServer_Local_CDM_Stage",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {

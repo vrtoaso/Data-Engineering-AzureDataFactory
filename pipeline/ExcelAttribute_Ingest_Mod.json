@@ -1,0 +1,325 @@
+{
+	"name": "ExcelAttribute_Ingest_Mod",
+	"properties": {
+		"activities": [
+			{
+				"name": "Import From Blob To DB",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ExcelSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true
+						}
+					},
+					"sink": {
+						"type": "SqlServerSink",
+						"preCopyScript": {
+							"value": "DROP TABLE @{pipeline().parameters.SchemaName}.@{pipeline().parameters.TableName}",
+							"type": "Expression"
+						},
+						"tableOption": "autoCreate"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "OrderNumber",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "OrderNumber",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Sales Channel",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Sales Channel",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Warehouse Code",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Warehouse Code",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Procured Date",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Procured Date",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "OrderDate",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "OrderDate",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Ship Date",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Ship Date",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Delivery Date",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Delivery Date",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Currency Code",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Currency Code",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Sales Team Index",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Sales Team Index",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Customer Index",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Customer Index",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Store Index",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Store Index",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Product Index",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Product Index",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Order Quantity",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Order Quantity",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Discount Applied",
+									"type": "String",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Discount Applied",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Unit Price",
+									"type": "Double",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Unit Price",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "Unit Cost",
+									"type": "Double",
+									"physicalType": "String"
+								},
+								"sink": {
+									"name": "Unit Cost",
+									"type": "String"
+								}
+							}
+						],
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "src_excel",
+						"type": "DatasetReference",
+						"parameters": {
+							"FileName": {
+								"value": "@pipeline().parameters.FileName",
+								"type": "Expression"
+							},
+							"SheetName": {
+								"value": "@pipeline().parameters.SheetName",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "SQLServer_Local_Stage",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Load Distinct Fields",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Import From Blob To DB",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[Cleanse_InsertAttribute]",
+					"storedProcedureParameters": {
+						"Column": {
+							"value": "",
+							"type": "String"
+						},
+						"DataSource": {
+							"value": "",
+							"type": "String"
+						},
+						"SchemaName": {
+							"value": "",
+							"type": "String"
+						},
+						"SubjectArea": {
+							"value": "",
+							"type": "String"
+						},
+						"TableName": {
+							"value": "",
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "azuredbsqltraining",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"FileName": {
+				"type": "string",
+				"defaultValue": "Business Intelligence Summit - Demo Data.xlsx"
+			},
+			"SheetName": {
+				"type": "string",
+				"defaultValue": "Sales Orders"
+			},
+			"SchemaName": {
+				"type": "string",
+				"defaultValue": "dbo"
+			},
+			"TableName": {
+				"type": "string",
+				"defaultValue": "BISummit_SalesOrders"
+			},
+			"Column": {
+				"type": "string"
+			},
+			"DataSource": {
+				"type": "string"
+			},
+			"SubjectArea": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2020-08-20T08:07:24Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
