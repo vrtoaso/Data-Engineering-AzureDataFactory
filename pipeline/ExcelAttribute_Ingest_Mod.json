@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Import From Blob To DB",
+				"name": "Import From DB To Stage DB",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -16,11 +16,9 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "ExcelSource",
-						"storeSettings": {
-							"type": "AzureBlobStorageReadSettings",
-							"recursive": true
-						}
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
 					},
 					"sink": {
 						"type": "SqlServerSink",
@@ -220,18 +218,8 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "src_excel",
-						"type": "DatasetReference",
-						"parameters": {
-							"FileName": {
-								"value": "@pipeline().parameters.FileName",
-								"type": "Expression"
-							},
-							"SheetName": {
-								"value": "@pipeline().parameters.SheetName",
-								"type": "Expression"
-							}
-						}
+						"referenceName": "SQLServer_Local_CDM_Stage",
+						"type": "DatasetReference"
 					}
 				],
 				"outputs": [
@@ -246,7 +234,7 @@
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
-						"activity": "Import From Blob To DB",
+						"activity": "Import From DB To Stage DB",
 						"dependencyConditions": [
 							"Succeeded"
 						]
