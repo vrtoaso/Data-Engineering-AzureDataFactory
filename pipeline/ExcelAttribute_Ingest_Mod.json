@@ -31,7 +31,8 @@
 								"sink": {
 									"name": ""
 								}
-							}
+							},
+							null
 						],
 						"typeConversion": true,
 						"typeConversionSettings": {
