@@ -28,179 +28,8 @@
 						"type": "TabularTranslator",
 						"mappings": [
 							{
-								"source": {
-									"name": "OrderNumber",
-									"type": "String",
-									"physicalType": "String"
-								},
 								"sink": {
-									"name": "OrderNumber",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Sales Channel",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Sales Channel",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Warehouse Code",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Warehouse Code",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Procured Date",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Procured Date",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "OrderDate",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "OrderDate",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Ship Date",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Ship Date",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Delivery Date",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Delivery Date",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Currency Code",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Currency Code",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Sales Team Index",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Sales Team Index",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Customer Index",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Customer Index",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Store Index",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Store Index",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Product Index",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Product Index",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Order Quantity",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Order Quantity",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Discount Applied",
-									"type": "String",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Discount Applied",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Unit Price",
-									"type": "Double",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Unit Price",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Unit Cost",
-									"type": "Double",
-									"physicalType": "String"
-								},
-								"sink": {
-									"name": "Unit Cost",
-									"type": "String"
+									"name": ""
 								}
 							}
 						],
@@ -214,13 +43,22 @@
 				"inputs": [
 					{
 						"referenceName": "SQLServer_Local_CDM_Stage",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"SrcTableName": "account",
+							"SrcSchemaName": "raw",
+							"SrcColumnName": "acctcd"
+						}
 					}
 				],
 				"outputs": [
 					{
 						"referenceName": "SQLServer_Local_Stage",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"TableName": "dbo",
+							"SchemaName": "IngestField"
+						}
 					}
 				]
 			},
