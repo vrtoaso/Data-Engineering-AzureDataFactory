@@ -1,0 +1,105 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "KryptosDev"
+		},
+		"SQLServer_Local_CDM_Stage_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SQLServer_Local_CDM_Stage'"
+		},
+		"SQLServer_Local_CDM_Stage_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'SQLServer_Local_CDM_Stage'"
+		},
+		"SQLServer_Local_Stage_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SQLServer_Local_Stage'"
+		},
+		"SQLServer_Local_Stage_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'SQLServer_Local_Stage'"
+		},
+		"attributecleanse_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'attributecleanse'"
+		},
+		"azuredbsqltraining_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'azuredbsqltraining'"
+		},
+		"SQLServer_Local_CDM_Stage_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "vtoas"
+		},
+		"SQLServer_Local_Stage_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "vtoas"
+		},
+		"Snowflake1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Snowflake1'"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "KryptosDev_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"attributecleanse_connectionString": {
+						"value": "[parameters('attributecleanse_connectionString')]"
+					},
+					"azuredbsqltraining_connectionString": {
+						"value": "[parameters('azuredbsqltraining_connectionString')]"
+					},
+					"SQLServer_Local_CDM_Stage_connectionString": {
+						"value": "[parameters('SQLServer_Local_CDM_Stage_connectionString')]"
+					},
+					"SQLServer_Local_CDM_Stage_password": {
+						"value": "[parameters('SQLServer_Local_CDM_Stage_password')]"
+					},
+					"SQLServer_Local_Stage_connectionString": {
+						"value": "[parameters('SQLServer_Local_Stage_connectionString')]"
+					},
+					"SQLServer_Local_Stage_password": {
+						"value": "[parameters('SQLServer_Local_Stage_password')]"
+					},
+					"Snowflake1_connectionString": {
+						"value": "[parameters('Snowflake1_connectionString')]"
+					},
+					"SQLServer_Local_CDM_Stage_properties_typeProperties_userName": {
+						"value": "[parameters('SQLServer_Local_CDM_Stage_properties_typeProperties_userName')]"
+					},
+					"SQLServer_Local_Stage_properties_typeProperties_userName": {
+						"value": "[parameters('SQLServer_Local_Stage_properties_typeProperties_userName')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

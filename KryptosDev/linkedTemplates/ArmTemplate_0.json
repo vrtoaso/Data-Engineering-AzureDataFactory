@@ -1,0 +1,1316 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "KryptosDev"
+		},
+		"attributecleanse_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'attributecleanse'"
+		},
+		"azuredbsqltraining_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'azuredbsqltraining'"
+		},
+		"SQLServer_Local_CDM_Stage_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SQLServer_Local_CDM_Stage'"
+		},
+		"SQLServer_Local_CDM_Stage_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'SQLServer_Local_CDM_Stage'"
+		},
+		"SQLServer_Local_Stage_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'SQLServer_Local_Stage'"
+		},
+		"SQLServer_Local_Stage_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'SQLServer_Local_Stage'"
+		},
+		"Snowflake1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'Snowflake1'"
+		},
+		"SQLServer_Local_CDM_Stage_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "vtoas"
+		},
+		"SQLServer_Local_Stage_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "vtoas"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/attributecleanse')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('attributecleanse_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/azuredbsqltraining')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('azuredbsqltraining_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CarbonX1')]",
+			"type": "Microsoft.DataFactory/factories/integrationRuntimes",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "SelfHosted",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Snowflake1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "Snowflake",
+				"typeProperties": {
+					"connectionString": "[parameters('Snowflake1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Excel_Output')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "attributecleanse",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"FileName": {
+						"type": "string"
+					},
+					"SheetName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": {
+						"value": "@dataset().SheetName",
+						"type": "Expression"
+					},
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().FileName",
+							"type": "Expression"
+						},
+						"container": "attributecleanseoutput"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/attributecleanse')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PWAzureTrainingDB')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "azuredbsqltraining",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"TableName": {
+						"type": "string"
+					},
+					"SchemaName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().SchemaName",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().TableName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/azuredbsqltraining')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dest_csv')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "attributecleanse",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"container": "attributecleanseoutput"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/attributecleanse')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dest_excel')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "attributecleanse",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"FileName": {
+						"type": "string"
+					},
+					"SheetName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": {
+						"value": "@dataset().SheetName",
+						"type": "Expression"
+					},
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().FileName",
+							"type": "Expression"
+						},
+						"container": "attributecleanseoutput"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/attributecleanse')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/src_excel')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "attributecleanse",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"FileName": {
+						"type": "string"
+					},
+					"SheetName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": {
+						"value": "@dataset().SheetName",
+						"type": "Expression"
+					},
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": {
+							"value": "@dataset().FileName",
+							"type": "Expression"
+						},
+						"container": "attributecleanse"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "Index",
+						"type": "String"
+					},
+					{
+						"name": "Product Name",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/attributecleanse')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SQLServer_Local_CDM_Stage')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('SQLServer_Local_CDM_Stage_connectionString')]",
+					"userName": "[parameters('SQLServer_Local_CDM_Stage_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('SQLServer_Local_CDM_Stage_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "CarbonX1",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/CarbonX1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SQLServer_Local_Stage')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "SqlServer",
+				"typeProperties": {
+					"connectionString": "[parameters('SQLServer_Local_Stage_connectionString')]",
+					"userName": "[parameters('SQLServer_Local_Stage_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('SQLServer_Local_Stage_password')]"
+					}
+				},
+				"connectVia": {
+					"referenceName": "CarbonX1",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/integrationRuntimes/CarbonX1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AttributeCleanse')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Stored procedure1",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Cleanse_InsertAttribute]",
+							"storedProcedureParameters": {
+								"ColumnName": {
+									"value": "",
+									"type": "String"
+								},
+								"DataSource": {
+									"value": "",
+									"type": "String"
+								},
+								"SchemaName": {
+									"value": "",
+									"type": "String"
+								},
+								"SubjectArea": {
+									"value": "",
+									"type": "String"
+								},
+								"TableName": {
+									"value": "",
+									"type": "String"
+								},
+								"ValueFunction": {
+									"value": "",
+									"type": "String"
+								},
+								"ValueType": {
+									"value": "",
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "SQLServer_Local_CDM_Stage",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"parameters": {
+					"SchemaName": {
+						"type": "string"
+					},
+					"TableName": {
+						"type": "string"
+					},
+					"ColumnName": {
+						"type": "string"
+					},
+					"DataSource": {
+						"type": "string"
+					},
+					"SubjectArea": {
+						"type": "string"
+					},
+					"ValueFunction": {
+						"type": "string"
+					},
+					"ValueType": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SQLServer_Local_CDM_Stage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ExcelAttribute_Ingest')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Import From Blob To DB",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ExcelSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true
+								}
+							},
+							"sink": {
+								"type": "SqlServerSink",
+								"preCopyScript": {
+									"value": "DROP TABLE @{pipeline().parameters.SchemaName}.@{pipeline().parameters.TableName}",
+									"type": "Expression"
+								},
+								"tableOption": "autoCreate"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "OrderNumber",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "OrderNumber",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Sales Channel",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Sales Channel",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Warehouse Code",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Warehouse Code",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Procured Date",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Procured Date",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "OrderDate",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "OrderDate",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Ship Date",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Ship Date",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Delivery Date",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Delivery Date",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Currency Code",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Currency Code",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Sales Team Index",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Sales Team Index",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Customer Index",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Customer Index",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Store Index",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Store Index",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Product Index",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Product Index",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Order Quantity",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Order Quantity",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Discount Applied",
+											"type": "String",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Discount Applied",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Unit Price",
+											"type": "Double",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Unit Price",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Unit Cost",
+											"type": "Double",
+											"physicalType": "String"
+										},
+										"sink": {
+											"name": "Unit Cost",
+											"type": "String"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "src_excel",
+								"type": "DatasetReference",
+								"parameters": {
+									"FileName": {
+										"value": "@pipeline().parameters.FileName",
+										"type": "Expression"
+									},
+									"SheetName": {
+										"value": "@pipeline().parameters.SheetName",
+										"type": "Expression"
+									}
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "PWAzureTrainingDB",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": {
+										"value": "@pipeline().parameters.TableName",
+										"type": "Expression"
+									},
+									"SchemaName": {
+										"value": "@pipeline().parameters.SchemaName",
+										"type": "Expression"
+									}
+								}
+							}
+						]
+					},
+					{
+						"name": "Load Distinct Fields",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "Import From Blob To DB",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Cleanse_InsertAttribute]",
+							"storedProcedureParameters": {
+								"Column": {
+									"value": "",
+									"type": "String"
+								},
+								"DataSource": {
+									"value": "",
+									"type": "String"
+								},
+								"SchemaName": {
+									"value": "",
+									"type": "String"
+								},
+								"SubjectArea": {
+									"value": "",
+									"type": "String"
+								},
+								"TableName": {
+									"value": "",
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "azuredbsqltraining",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"parameters": {
+					"FileName": {
+						"type": "string",
+						"defaultValue": "Business Intelligence Summit - Demo Data.xlsx"
+					},
+					"SheetName": {
+						"type": "string",
+						"defaultValue": "Sales Orders"
+					},
+					"SchemaName": {
+						"type": "string",
+						"defaultValue": "dbo"
+					},
+					"TableName": {
+						"type": "string",
+						"defaultValue": "BISummit_SalesOrders"
+					},
+					"Column": {
+						"type": "string"
+					},
+					"DataSource": {
+						"type": "string"
+					},
+					"SubjectArea": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2020-08-20T08:07:24Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/src_excel')]",
+				"[concat(variables('factoryId'), '/datasets/PWAzureTrainingDB')]",
+				"[concat(variables('factoryId'), '/linkedServices/azuredbsqltraining')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ExcelAttribute_Output')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Export From DB to Blob",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobStorageWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "PWAzureTrainingDB",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": {
+										"value": "@pipeline().parameters.TableName",
+										"type": "Expression"
+									},
+									"SchemaName": {
+										"value": "@pipeline().parameters.SchemaName",
+										"type": "Expression"
+									}
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "dest_csv",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"parameters": {
+					"TableName": {
+						"type": "string",
+						"defaultValue": "BISummit_SalesOrders"
+					},
+					"SchemaName": {
+						"type": "string",
+						"defaultValue": "dbo"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2020-08-18T19:24:05Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/PWAzureTrainingDB')]",
+				"[concat(variables('factoryId'), '/datasets/dest_csv')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "Excel File Name",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							},
+							{
+								"activity": "Excel Sheet Name",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [
+							{
+								"name": "FileName",
+								"value": "Business Intelligence Summit - Demo Data"
+							},
+							{
+								"name": "SheetName",
+								"value": "Sales Orders"
+							}
+						],
+						"typeProperties": {
+							"source": {
+								"type": "ExcelSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							},
+							"sink": {
+								"type": "SqlServerSink",
+								"tableOption": "autoCreate"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "src_excel",
+								"type": "DatasetReference",
+								"parameters": {
+									"FileName": {
+										"value": "@{activity('Excel File Name').output.firstRow}",
+										"type": "Expression"
+									},
+									"SheetName": {
+										"value": "@{activity('Excel Sheet Name').output.firstRow}",
+										"type": "Expression"
+									}
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "PWAzureTrainingDB",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": "dummy",
+									"SchemaName": "dummy"
+								}
+							}
+						]
+					},
+					{
+						"name": "Excel File Name",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ExcelSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							},
+							"dataset": {
+								"referenceName": "src_excel",
+								"type": "DatasetReference",
+								"parameters": {
+									"FileName": "Business Intelligence Summit - Demo Data.xlsx",
+									"SheetName": "Sales Orders"
+								}
+							}
+						}
+					},
+					{
+						"name": "Excel Sheet Name",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ExcelSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							},
+							"dataset": {
+								"referenceName": "src_excel",
+								"type": "DatasetReference",
+								"parameters": {
+									"FileName": "Business Intelligence Summit - Demo Data.xlsx",
+									"SheetName": "Sales Orders"
+								}
+							}
+						}
+					}
+				],
+				"annotations": [],
+				"lastPublishTime": "2020-08-18T19:18:42Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/src_excel')]",
+				"[concat(variables('factoryId'), '/datasets/PWAzureTrainingDB')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SQLServer_Local_CDM_Stage')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SQLServer_Local_CDM_Stage",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"SrcTableName": {
+						"type": "string"
+					},
+					"SrcSchemaName": {
+						"type": "string"
+					},
+					"SrcColumnName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().SrcSchemaName",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().SrcTableName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SQLServer_Local_CDM_Stage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SQLServer_Local_Stage')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SQLServer_Local_Stage",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"TableName": {
+						"type": "string"
+					},
+					"SchemaName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().SchemaName",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().TableName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/SQLServer_Local_Stage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ExcelAttribute_Ingest_Mod')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Import From DB To Stage DB",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "SqlServerSink"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "AcctCdOrig",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "IngestFieldId",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "AcctCd",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "DateCapture",
+											"type": "DateTime",
+											"physicalType": "datetime"
+										}
+									},
+									{
+										"source": {
+											"name": "AcctCdLong",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "DataSource",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "AcctCdNoZero",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "SubjectArea",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "AcctTypCd",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Field1",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "AcctDescOrig",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Field1Function",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "AcctDesc",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Field1Type",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SQLServer_Local_CDM_Stage",
+								"type": "DatasetReference",
+								"parameters": {
+									"SrcTableName": "account",
+									"SrcSchemaName": "raw",
+									"SrcColumnName": "acctcd"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "SQLServer_Local_Stage",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": "IngestField",
+									"SchemaName": "dbo"
+								}
+							}
+						]
+					},
+					{
+						"name": "Load Distinct Fields",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "Import From DB To Stage DB",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Cleanse_InsertAttribute]",
+							"storedProcedureParameters": {
+								"Column": {
+									"value": "",
+									"type": "String"
+								},
+								"DataSource": {
+									"value": "",
+									"type": "String"
+								},
+								"SchemaName": {
+									"value": "",
+									"type": "String"
+								},
+								"SubjectArea": {
+									"value": "",
+									"type": "String"
+								},
+								"TableName": {
+									"value": "",
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "azuredbsqltraining",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"parameters": {
+					"SrcSchemaName": {
+						"type": "string"
+					},
+					"SrcTableName": {
+						"type": "string"
+					},
+					"Column": {
+						"type": "string"
+					},
+					"DataSource": {
+						"type": "string"
+					},
+					"SubjectArea": {
+						"type": "string"
+					},
+					"SchemaName": {
+						"type": "string"
+					},
+					"TableName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2020-08-20T08:07:24Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SQLServer_Local_CDM_Stage')]",
+				"[concat(variables('factoryId'), '/datasets/SQLServer_Local_Stage')]",
+				"[concat(variables('factoryId'), '/linkedServices/azuredbsqltraining')]"
+			]
+		}
+	]
+}

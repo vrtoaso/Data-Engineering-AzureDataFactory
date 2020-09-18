@@ -1,0 +1,395 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "KryptosDev"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/AttributeCleanse')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Stored procedure1",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Cleanse_InsertAttribute]",
+							"storedProcedureParameters": {
+								"ColumnName": {
+									"value": "",
+									"type": "String"
+								},
+								"DataSource": {
+									"value": "",
+									"type": "String"
+								},
+								"SchemaName": {
+									"value": "",
+									"type": "String"
+								},
+								"SubjectArea": {
+									"value": "",
+									"type": "String"
+								},
+								"TableName": {
+									"value": "",
+									"type": "String"
+								},
+								"ValueFunction": {
+									"value": "",
+									"type": "String"
+								},
+								"ValueType": {
+									"value": "",
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "SQLServer_Local_CDM_Stage",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"parameters": {
+					"SchemaName": {
+						"type": "string"
+					},
+					"TableName": {
+						"type": "string"
+					},
+					"ColumnName": {
+						"type": "string"
+					},
+					"DataSource": {
+						"type": "string"
+					},
+					"SubjectArea": {
+						"type": "string"
+					},
+					"ValueFunction": {
+						"type": "string"
+					},
+					"ValueType": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ExcelAttribute_Ingest_Mod')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Import From DB To Stage DB",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "SqlServerSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "SqlServerSink"
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "AcctCdOrig",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "IngestFieldId",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "AcctCd",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "DateCapture",
+											"type": "DateTime",
+											"physicalType": "datetime"
+										}
+									},
+									{
+										"source": {
+											"name": "AcctCdLong",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "DataSource",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "AcctCdNoZero",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "SubjectArea",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "AcctTypCd",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Field1",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "AcctDescOrig",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Field1Function",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "AcctDesc",
+											"type": "String",
+											"physicalType": "nvarchar"
+										},
+										"sink": {
+											"name": "Field1Type",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SQLServer_Local_CDM_Stage",
+								"type": "DatasetReference",
+								"parameters": {
+									"SrcTableName": "account",
+									"SrcSchemaName": "raw",
+									"SrcColumnName": "acctcd"
+								}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "SQLServer_Local_Stage",
+								"type": "DatasetReference",
+								"parameters": {
+									"TableName": "IngestField",
+									"SchemaName": "dbo"
+								}
+							}
+						]
+					},
+					{
+						"name": "Load Distinct Fields",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [
+							{
+								"activity": "Import From DB To Stage DB",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[dbo].[Cleanse_InsertAttribute]",
+							"storedProcedureParameters": {
+								"Column": {
+									"value": "",
+									"type": "String"
+								},
+								"DataSource": {
+									"value": "",
+									"type": "String"
+								},
+								"SchemaName": {
+									"value": "",
+									"type": "String"
+								},
+								"SubjectArea": {
+									"value": "",
+									"type": "String"
+								},
+								"TableName": {
+									"value": "",
+									"type": "String"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "azuredbsqltraining",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"parameters": {
+					"SrcSchemaName": {
+						"type": "string"
+					},
+					"SrcTableName": {
+						"type": "string"
+					},
+					"Column": {
+						"type": "string"
+					},
+					"DataSource": {
+						"type": "string"
+					},
+					"SubjectArea": {
+						"type": "string"
+					},
+					"SchemaName": {
+						"type": "string"
+					},
+					"TableName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2020-08-20T08:07:24Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/SQLServer_Local_CDM_Stage')]",
+				"[concat(variables('factoryId'), '/datasets/SQLServer_Local_Stage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SQLServer_Local_CDM_Stage')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SQLServer_Local_CDM_Stage",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"SrcTableName": {
+						"type": "string"
+					},
+					"SrcSchemaName": {
+						"type": "string"
+					},
+					"SrcColumnName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().SrcSchemaName",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().SrcTableName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SQLServer_Local_Stage')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "SQLServer_Local_Stage",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"TableName": {
+						"type": "string"
+					},
+					"SchemaName": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "SqlServerTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": {
+						"value": "@dataset().SchemaName",
+						"type": "Expression"
+					},
+					"table": {
+						"value": "@dataset().TableName",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

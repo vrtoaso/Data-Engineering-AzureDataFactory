@@ -1,0 +1,42 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "KryptosDev"
+		},
+		"SQLServer_Local_CDM_Stage_connectionString": {
+			"value": ""
+		},
+		"SQLServer_Local_CDM_Stage_password": {
+			"value": ""
+		},
+		"SQLServer_Local_Stage_connectionString": {
+			"value": ""
+		},
+		"SQLServer_Local_Stage_password": {
+			"value": ""
+		},
+		"attributecleanse_connectionString": {
+			"value": ""
+		},
+		"azuredbsqltraining_connectionString": {
+			"value": ""
+		},
+		"SQLServer_Local_CDM_Stage_properties_typeProperties_userName": {
+			"value": "vtoas"
+		},
+		"SQLServer_Local_Stage_properties_typeProperties_userName": {
+			"value": "vtoas"
+		},
+		"Snowflake1_connectionString": {
+			"value": ""
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
