@@ -1,0 +1,84 @@
+{
+	"name": "src_snowflake_proto",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "blob_snowflake_proto",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "production_export.csv",
+				"container": "snowflake"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "ranchname",
+				"type": "String"
+			},
+			{
+				"name": "cropyear",
+				"type": "String"
+			},
+			{
+				"name": "commodity",
+				"type": "String"
+			},
+			{
+				"name": "Region",
+				"type": "String"
+			},
+			{
+				"name": "CycleType",
+				"type": "String"
+			},
+			{
+				"name": "Cycle",
+				"type": "String"
+			},
+			{
+				"name": "(No column name)6",
+				"type": "String"
+			},
+			{
+				"name": "(No column name)7",
+				"type": "String"
+			},
+			{
+				"name": "Market",
+				"type": "String"
+			},
+			{
+				"name": "Hoops",
+				"type": "String"
+			},
+			{
+				"name": "variety",
+				"type": "String"
+			},
+			{
+				"name": "WeekEnd",
+				"type": "String"
+			},
+			{
+				"name": "Acres",
+				"type": "String"
+			},
+			{
+				"name": "Crates",
+				"type": "String"
+			},
+			{
+				"name": "Yield",
+				"type": "String"
+			}
+		]
+	}
+}

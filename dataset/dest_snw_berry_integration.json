@@ -1,0 +1,16 @@
+{
+	"name": "dest_snw_berry_integration",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Snowflake_Interation_Developer",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SnowflakeTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "INTEGRATION",
+			"table": "PRODUCTION"
+		}
+	}
+}
