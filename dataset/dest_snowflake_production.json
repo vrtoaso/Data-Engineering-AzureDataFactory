@@ -1,5 +1,5 @@
 {
-	"name": "dest_snw_berry_integration",
+	"name": "dest_snowflake_production",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "Snowflake_Interation_Developer",
