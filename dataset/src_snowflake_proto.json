@@ -11,7 +11,7 @@
 			"location": {
 				"type": "AzureBlobStorageLocation",
 				"fileName": "production_export.csv",
-				"container": "snowflake"
+				"container": "snowflake-source-blob"
 			},
 			"columnDelimiter": ",",
 			"rowDelimiter": ",",
