@@ -1,8 +1,8 @@
 {
-	"name": "dest_csv",
+	"name": "dest_csv_snowflake",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "attributecleanse",
+			"referenceName": "blob_snowflake_proto",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"container": "attributecleanseoutput"
+				"container": "snowflake-source-blob"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
