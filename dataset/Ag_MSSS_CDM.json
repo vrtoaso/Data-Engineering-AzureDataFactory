@@ -1,0 +1,23 @@
+{
+	"name": "Ag_MSSS_CDM",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SQLServer_Local_CDM_Stage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().SrcSchemaName",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().SrcTableName",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

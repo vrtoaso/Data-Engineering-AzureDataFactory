@@ -9,7 +9,7 @@
 		"type": "SnowflakeTable",
 		"schema": [],
 		"typeProperties": {
-			"schema": "INTEGRATION",
+			"schema": "PUBLIC",
 			"table": "PRODUCTION"
 		}
 	}
