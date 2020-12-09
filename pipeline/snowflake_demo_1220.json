@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "Source to Blob",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -15,8 +15,96 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": "SELECT r.ranchname,\n    r.cropyear,\n    c.commodity,\n    CASE WHEN r.regioncd = 'ox' then  'Oxnard'\n    WHEN r.regioncd = 'sm' then 'santa maria' Else ''\nend AS Region,\n    ct.cycletypedesc       AS CycleType,\n    Isnull(p.cycle, '')    Cycle,\n    r.latitude,\n    r.longitude,\n    CASE WHEN r.MarketCd = 'cnv' then  'Conventional'\n    WHEN r.MarketCd = 'org' then 'Organic' Else ''\n    end AS Market,\n    CASE WHEN r.hoops = 'y' then  'Hoops'\n    WHEN r.hoops = 'n' then 'Open' Else '' end AS Hoops,\n    v.variety,\n    p.weekending           AS WeekEnd,\n    b.blockacre            AS Acres,\n    p.crates               AS Crates,\n    p.crates / b.blockacre AS Yield\nFROM raw.ranch r\n    LEFT JOIN raw.block b\n    ON r.ranchid = b.ranchid\n    LEFT JOIN raw.production p\n    ON b.blockid = p.blockid\n    LEFT JOIN raw.variety v\n    ON b.varietyid = v.varietyid\n    LEFT JOIN raw.commodity C\n    ON v.commcd = c.commcd\n    LEFT JOIN raw.cycletype ct\n    ON r.cycletypecd = ct.cycletypecd\nWHERE  v.variety <> 'juice/freezer'\n    AND v.variety <> 'Frozen'\n    AND v.variety <> 'SKU 70'\n    AND ct.cycletypedesc IS NOT NULL ",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobStorageWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "Ag_MSSS_CDM",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "src_snowflake_proto",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Blob to Snowflake",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Source to Blob",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SnowflakeSink",
+						"importSettings": {
+							"type": "SnowflakeImportCopyCommand"
+						}
+					},
 					"enableStaging": false
-				}
+				},
+				"inputs": [
+					{
+						"referenceName": "dest_csv_snowflake",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "dest_snowflake_production",
+						"type": "DatasetReference"
+					}
+				]
 			}
 		],
 		"annotations": []
