@@ -10,7 +10,7 @@
 		"schema": [],
 		"typeProperties": {
 			"schema": "PUBLIC",
-			"table": "PRODUCTION"
+			"table": "PRODUCTION_STAGE"
 		}
 	}
 }
