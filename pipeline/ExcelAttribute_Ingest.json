@@ -328,6 +328,9 @@
 				"type": "string"
 			}
 		},
+		"folder": {
+			"name": "Legacy"
+		},
 		"annotations": [],
 		"lastPublishTime": "2020-08-20T08:07:24Z"
 	},

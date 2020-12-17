@@ -16,6 +16,9 @@
 				"type": "string"
 			}
 		},
+		"folder": {
+			"name": "Legacy"
+		},
 		"annotations": [],
 		"type": "SqlServerTable",
 		"schema": [],

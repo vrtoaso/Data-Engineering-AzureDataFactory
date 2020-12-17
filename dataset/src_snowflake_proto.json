@@ -5,6 +5,9 @@
 			"referenceName": "blob_snowflake_proto",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "Snowflake"
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {

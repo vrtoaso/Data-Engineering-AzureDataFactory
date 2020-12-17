@@ -5,6 +5,9 @@
 			"referenceName": "Snowflake_Interation_Developer",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "Snowflake"
+		},
 		"annotations": [],
 		"type": "SnowflakeTable",
 		"schema": [],

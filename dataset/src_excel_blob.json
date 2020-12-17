@@ -1,5 +1,5 @@
 {
-	"name": "dest_excel",
+	"name": "src_excel_blob",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "attributecleanse",
@@ -14,7 +14,7 @@
 			}
 		},
 		"folder": {
-			"name": "Legacy"
+			"name": "Project Grassroots"
 		},
 		"annotations": [],
 		"type": "Excel",
@@ -29,11 +29,20 @@
 					"value": "@dataset().FileName",
 					"type": "Expression"
 				},
-				"container": "attributecleanseoutput"
+				"container": "attributecleanse"
 			},
 			"firstRowAsHeader": true
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "Index",
+				"type": "String"
+			},
+			{
+				"name": "Product Name",
+				"type": "String"
+			}
+		]
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }

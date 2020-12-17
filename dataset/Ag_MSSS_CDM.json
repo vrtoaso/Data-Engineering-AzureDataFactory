@@ -5,6 +5,9 @@
 			"referenceName": "SQLServer_Local_CDM_Stage",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "Legacy"
+		},
 		"annotations": [],
 		"type": "SqlServerTable",
 		"schema": []

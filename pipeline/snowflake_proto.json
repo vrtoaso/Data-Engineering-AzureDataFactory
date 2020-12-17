@@ -38,15 +38,12 @@
 						"referenceName": "src_snowflake_proto",
 						"type": "DatasetReference"
 					}
-				],
-				"outputs": [
-					{
-						"referenceName": "dest_snw_berry_integration",
-						"type": "DatasetReference"
-					}
 				]
 			}
 		],
+		"folder": {
+			"name": "Snowflake"
+		},
 		"annotations": []
 	}
 }
