@@ -6,8 +6,8 @@
 		"type": "SqlServer",
 		"typeProperties": {
 			"connectionString": "integrated security=True;data source=192.168.0.11;initial catalog=AgCore",
-			"userName": "vrtoa",
-			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI2YzYzYmZhYS00NjFiLTRlZDktYjYyMC00YjRlMTJjYzQzM2QiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+			"userName": "vtoas",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiIxNjU1NTQwNS02YmRlLTRjMWYtODQ2MS02OGEwNzIyNDQ4M2IiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
 		},
 		"connectVia": {
 			"referenceName": "CarbonX1",
