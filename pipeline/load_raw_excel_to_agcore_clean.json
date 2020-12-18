@@ -1,5 +1,5 @@
 {
-	"name": "agcore_load_raw_excel",
+	"name": "load_raw_excel_to_agcore_clean",
 	"properties": {
 		"activities": [
 			{
@@ -59,6 +59,23 @@
 				]
 			}
 		],
+		"parameters": {
+			"SchemaName": {
+				"type": "string"
+			},
+			"TableName": {
+				"type": "string"
+			},
+			"FileName": {
+				"type": "string"
+			},
+			"SheetName": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "Project Grassroots"
+		},
 		"annotations": []
 	}
 }
