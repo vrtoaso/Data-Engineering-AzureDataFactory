@@ -29,8 +29,8 @@
 					"value": "@dataset().FileName",
 					"type": "Expression"
 				},
-				"folderPath": "agrawfiles",
-				"container": "adlsgen2dwhdemo"
+				"folderPath": "Stage",
+				"container": "agrawfiles"
 			},
 			"firstRowAsHeader": true
 		},
