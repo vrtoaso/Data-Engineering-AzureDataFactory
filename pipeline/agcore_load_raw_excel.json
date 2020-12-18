@@ -52,8 +52,8 @@
 						"referenceName": "AgCore_OnPrem",
 						"type": "DatasetReference",
 						"parameters": {
-							"TableName": "Admin",
-							"SchemaName": "Test_Stage"
+							"TableName": "Test_Import",
+							"SchemaName": "Admin"
 						}
 					}
 				]
