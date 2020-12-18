@@ -15,8 +15,29 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
 					"enableStaging": false
-				}
+				},
+				"inputs": [
+					{
+						"referenceName": "AgCore_OnPrem",
+						"type": "DatasetReference",
+						"parameters": {
+							"TableName": {
+								"value": "@pipeline().parameters.TableName",
+								"type": "Expression"
+							},
+							"SchemaName": {
+								"value": "@pipeline().parameters.SchemaName",
+								"type": "Expression"
+							}
+						}
+					}
+				]
 			}
 		],
 		"parameters": {
