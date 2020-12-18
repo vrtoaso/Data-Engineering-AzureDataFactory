@@ -42,7 +42,7 @@
 						"referenceName": "src_excel_blob",
 						"type": "DatasetReference",
 						"parameters": {
-							"FileName": "Ledger",
+							"FileName": "Ledger.xls",
 							"SheetName": "Ledger"
 						}
 					}
