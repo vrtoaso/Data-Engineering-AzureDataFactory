@@ -2,7 +2,7 @@
 	"name": "src_excel_blob",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "attributecleanse",
+			"referenceName": "adlsgen2dwhdemo",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
@@ -29,7 +29,8 @@
 					"value": "@dataset().FileName",
 					"type": "Expression"
 				},
-				"container": "attributecleanse"
+				"folderPath": "agrawfiles",
+				"container": "adlsgen2dwhdemo"
 			},
 			"firstRowAsHeader": true
 		},
