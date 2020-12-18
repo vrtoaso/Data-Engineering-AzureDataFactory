@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "Blob to SQL Server",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -23,7 +23,19 @@
 							"enablePartitionDiscovery": false
 						}
 					},
-					"enableStaging": false
+					"sink": {
+						"type": "SqlServerSink",
+						"tableOption": "autoCreate"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
 				},
 				"inputs": [
 					{
@@ -32,6 +44,16 @@
 						"parameters": {
 							"FileName": "Ledger.xls",
 							"SheetName": "Ledger"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "AgCore_OnPrem",
+						"type": "DatasetReference",
+						"parameters": {
+							"TableName": "Admin",
+							"SchemaName": "Test_Stage"
 						}
 					}
 				]
