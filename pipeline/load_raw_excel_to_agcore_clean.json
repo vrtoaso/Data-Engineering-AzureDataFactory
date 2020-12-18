@@ -42,8 +42,14 @@
 						"referenceName": "src_excel_blob",
 						"type": "DatasetReference",
 						"parameters": {
-							"FileName": "Ledger.xls",
-							"SheetName": "Ledger"
+							"FileName": {
+								"value": "@pipeline().parameters.FileName",
+								"type": "Expression"
+							},
+							"SheetName": {
+								"value": "@pipeline().parameters.SheetName",
+								"type": "Expression"
+							}
 						}
 					}
 				],
@@ -52,8 +58,14 @@
 						"referenceName": "AgCore_OnPrem",
 						"type": "DatasetReference",
 						"parameters": {
-							"TableName": "Test_Import",
-							"SchemaName": "Admin"
+							"TableName": {
+								"value": "@pipeline().parameters.TableName",
+								"type": "Expression"
+							},
+							"SchemaName": {
+								"value": "@pipeline().parameters.SchemaName",
+								"type": "Expression"
+							}
 						}
 					}
 				]
