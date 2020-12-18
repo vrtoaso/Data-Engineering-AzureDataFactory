@@ -1,0 +1,12 @@
+{
+	"name": "AgCore_OnPrem",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "SQL2019_AgCore",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": []
+	}
+}
