@@ -1,9 +1,9 @@
 {
-	"name": "pipeline2",
+	"name": "Stage to Destination Table",
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "From Stage to Destination",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -19,6 +19,14 @@
 				}
 			}
 		],
+		"parameters": {
+			"TableName": {
+				"type": "string"
+			},
+			"SchemaName": {
+				"type": "string"
+			}
+		},
 		"annotations": []
 	}
 }
