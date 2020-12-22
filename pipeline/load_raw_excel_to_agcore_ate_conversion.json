@@ -1,0 +1,92 @@
+{
+	"name": "load_raw_excel_to_agcore_ate_conversion",
+	"properties": {
+		"description": "ATE Conversion Formatting",
+		"activities": [
+			{
+				"name": "Blob to SQL Server",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ExcelSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						}
+					},
+					"sink": {
+						"type": "SqlServerSink",
+						"tableOption": "autoCreate"
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "src_excel_blob_ate_tmp",
+						"type": "DatasetReference",
+						"parameters": {
+							"FileName": "ATE Conversion Formatting.xlsx",
+							"SheetName": "template"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "AgCore_OnPrem",
+						"type": "DatasetReference",
+						"parameters": {
+							"TableName": {
+								"value": "@pipeline().parameters.TableName",
+								"type": "Expression"
+							},
+							"SchemaName": {
+								"value": "@pipeline().parameters.SchemaName",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"parameters": {
+			"SchemaName": {
+				"type": "string",
+				"defaultValue": "Clean"
+			},
+			"TableName": {
+				"type": "string",
+				"defaultValue": "ate_conversion"
+			},
+			"FileName": {
+				"type": "string",
+				"defaultValue": "ATE Conversion Formatting.xlsx"
+			},
+			"SheetName": {
+				"type": "string",
+				"defaultValue": "template"
+			}
+		},
+		"folder": {
+			"name": "Project Grassroots"
+		},
+		"annotations": []
+	}
+}
