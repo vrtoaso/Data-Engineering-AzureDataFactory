@@ -73,15 +73,15 @@
 			},
 			"TableName": {
 				"type": "string",
-				"defaultValue": "ate_conversion"
+				"defaultValue": "ledger_import"
 			},
 			"FileName": {
 				"type": "string",
-				"defaultValue": "ATE Conversion Formatting.xlsx"
+				"defaultValue": "blob-import-ledger.xlsx"
 			},
 			"SheetName": {
 				"type": "string",
-				"defaultValue": "template"
+				"defaultValue": "import"
 			}
 		},
 		"folder": {
