@@ -1,0 +1,52 @@
+{
+	"name": "src_excel_blob_ate_tmp",
+	"properties": {
+		"description": "ATE Conversion Formatting",
+		"linkedServiceName": {
+			"referenceName": "adlsgen2dwhdemo",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"FileName": {
+				"type": "string",
+				"defaultValue": "ATE Conversion Formatting.xlsx"
+			},
+			"SheetName": {
+				"type": "string",
+				"defaultValue": "template"
+			}
+		},
+		"folder": {
+			"name": "Project Grassroots"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": {
+				"value": "@dataset().SheetName",
+				"type": "Expression"
+			},
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().FileName",
+					"type": "Expression"
+				},
+				"folderPath": "Stage",
+				"container": "agrawfiles"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "Index",
+				"type": "String"
+			},
+			{
+				"name": "Product Name",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
