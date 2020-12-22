@@ -43,8 +43,14 @@
 						"referenceName": "src_excel_blob_ate_tmp",
 						"type": "DatasetReference",
 						"parameters": {
-							"FileName": "ATE Conversion Formatting.xlsx",
-							"SheetName": "template"
+							"FileName": {
+								"value": "@pipeline().parameters.FileName",
+								"type": "Expression"
+							},
+							"SheetName": {
+								"value": "@pipeline().parameters.SheetName",
+								"type": "Expression"
+							}
 						}
 					}
 				],
