@@ -32,7 +32,7 @@
 				"folderPath": "Stage",
 				"container": "agrawfiles"
 			},
-			"firstRowAsHeader": true
+			"firstRowAsHeader": false
 		},
 		"schema": [
 			{
