@@ -1,0 +1,17 @@
+{
+	"name": "DemoData2021",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"connectionString": "integrated security=True;data source=192.168.0.11;initial catalog=DemoData2021",
+			"userName": "vtoas",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI5Yjg2NThjNC04M2JjLTRkNzctOGI0Ni1jNjQ0ZTJlNWExYmIiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "CarbonX1",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
