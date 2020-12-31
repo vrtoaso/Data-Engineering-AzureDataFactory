@@ -1,0 +1,20 @@
+{
+	"name": "DemoDataImport",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "adlsgen2dwhdemo",
+						"type": "LinkedServiceReference"
+					},
+					"name": "blobexcel"
+				}
+			],
+			"sinks": [],
+			"transformations": [],
+			"script": "source(allowSchemaDrift: false,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'excel',\n\tcontainer: 'data-cleanse',\n\tfolderPath: 'Staging',\n\tfileName: 'Customer Deep Dive.xlsx',\n\tsheetName: 'Sales Orders',\n\tfirstRowAsHeader: true) ~> blobexcel"
+		}
+	}
+}
