@@ -34,7 +34,56 @@
 			},
 			"firstRowAsHeader": true
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "OrderNumber",
+				"type": "String"
+			},
+			{
+				"name": "OrderDate",
+				"type": "String"
+			},
+			{
+				"name": "Customer Name Index",
+				"type": "String"
+			},
+			{
+				"name": "Channel",
+				"type": "String"
+			},
+			{
+				"name": "Currency Code",
+				"type": "String"
+			},
+			{
+				"name": "Warehouse Code",
+				"type": "String"
+			},
+			{
+				"name": "Delivery Region Index",
+				"type": "String"
+			},
+			{
+				"name": "Product Description Index",
+				"type": "String"
+			},
+			{
+				"name": "Order Quantity",
+				"type": "String"
+			},
+			{
+				"name": "Unit Price",
+				"type": "String"
+			},
+			{
+				"name": "Total Revenue",
+				"type": "String"
+			},
+			{
+				"name": "Total Unit Cost",
+				"type": "String"
+			}
+		]
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }
