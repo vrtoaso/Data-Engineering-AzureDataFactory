@@ -1,0 +1,12 @@
+{
+	"name": "indridcold",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": "integrated security=False;encrypt=True;connection timeout=30;data source=azuredbsqltraining-vrt.database.windows.net;initial catalog=indridcold;user id=vrtoa",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIktSWVBUT1NERVZfYTRkYmE2NGQtZWJjMS00ZTg1LTgwOGMtOTI0NjQ5ZmIyZjI2Ig0KfQ=="
+		}
+	}
+}
