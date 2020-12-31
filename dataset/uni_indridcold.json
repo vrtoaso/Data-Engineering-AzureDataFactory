@@ -1,5 +1,5 @@
 {
-	"name": "indridcold",
+	"name": "uni_indridcold",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "indridcold",
@@ -12,6 +12,9 @@
 			"TableName": {
 				"type": "string"
 			}
+		},
+		"folder": {
+			"name": "Cleanse"
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
