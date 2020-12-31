@@ -34,16 +34,7 @@
 			},
 			"firstRowAsHeader": true
 		},
-		"schema": [
-			{
-				"name": "Index",
-				"type": "String"
-			},
-			{
-				"name": "Product Name",
-				"type": "String"
-			}
-		]
+		"schema": []
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }

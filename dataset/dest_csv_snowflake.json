@@ -20,7 +20,68 @@
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "ranchname",
+				"type": "String"
+			},
+			{
+				"name": "cropyear",
+				"type": "String"
+			},
+			{
+				"name": "commodity",
+				"type": "String"
+			},
+			{
+				"name": "Region",
+				"type": "String"
+			},
+			{
+				"name": "CycleType",
+				"type": "String"
+			},
+			{
+				"name": "Cycle",
+				"type": "String"
+			},
+			{
+				"name": "(No column name)6",
+				"type": "String"
+			},
+			{
+				"name": "(No column name)7",
+				"type": "String"
+			},
+			{
+				"name": "Market",
+				"type": "String"
+			},
+			{
+				"name": "Hoops",
+				"type": "String"
+			},
+			{
+				"name": "variety",
+				"type": "String"
+			},
+			{
+				"name": "WeekEnd",
+				"type": "String"
+			},
+			{
+				"name": "Acres",
+				"type": "String"
+			},
+			{
+				"name": "Crates",
+				"type": "String"
+			},
+			{
+				"name": "Yield",
+				"type": "String"
+			}
+		]
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }
