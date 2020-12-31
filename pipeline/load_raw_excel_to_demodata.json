@@ -79,15 +79,15 @@
 			},
 			"TableName": {
 				"type": "string",
-				"defaultValue": "ledger_import"
+				"defaultValue": "Sales"
 			},
 			"FileName": {
 				"type": "string",
-				"defaultValue": "blob-import-ledger.xlsx"
+				"defaultValue": "Customer Deep Dive.xlsx"
 			},
 			"SheetName": {
 				"type": "string",
-				"defaultValue": "import"
+				"defaultValue": "Sales"
 			}
 		},
 		"folder": {
