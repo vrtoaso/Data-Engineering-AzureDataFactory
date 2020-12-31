@@ -1,0 +1,71 @@
+{
+	"name": "SourceDataset_5q7",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "adlsgen2dwhdemo",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Sales Orders",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Customer Deep Dive.xlsx",
+				"folderPath": "Staging",
+				"container": "data-cleanse"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "OrderNumber",
+				"type": "String"
+			},
+			{
+				"name": "OrderDate",
+				"type": "String"
+			},
+			{
+				"name": "Customer Name Index",
+				"type": "String"
+			},
+			{
+				"name": "Channel",
+				"type": "String"
+			},
+			{
+				"name": "Currency Code",
+				"type": "String"
+			},
+			{
+				"name": "Warehouse Code",
+				"type": "String"
+			},
+			{
+				"name": "Delivery Region Index",
+				"type": "String"
+			},
+			{
+				"name": "Product Description Index",
+				"type": "String"
+			},
+			{
+				"name": "Order Quantity",
+				"type": "String"
+			},
+			{
+				"name": "Unit Price",
+				"type": "String"
+			},
+			{
+				"name": "Total Revenue",
+				"type": "String"
+			},
+			{
+				"name": "Total Unit Cost",
+				"type": "String"
+			}
+		]
+	}
+}
